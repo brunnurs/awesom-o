@@ -1,0 +1,12 @@
+version: '2'
+services:
+    awesomo-postgresql:
+        container_name: awesomo-postgresql
+        image: postgres:9.5.4
+        # volumes:
+        #     - ~/volumes/jhipster/awesomo/postgresql/:/var/lib/postgresql/
+        environment:
+            - POSTGRES_USER=awesomo
+            - POSTGRES_PASSWORD=
+        ports:
+            - 5432:5432
