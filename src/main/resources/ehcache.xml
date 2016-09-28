@@ -37,5 +37,13 @@
            timeToLiveSeconds="3600">
     </cache>
     
+    <cache name="com.confinale.awesomo.domain.Project"
+                               timeToLiveSeconds="3600">
+                        </cache>
+                        
+    <cache name="com.confinale.awesomo.domain.WorkLog"
+                               timeToLiveSeconds="3600">
+                        </cache>
+                        
     <!-- jhipster-needle-ehcache-add-entry -->
 </ehcache>

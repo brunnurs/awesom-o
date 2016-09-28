@@ -1,0 +1,68 @@
+<div>
+    <h2>Work Logs</h2>
+    <jhi-alert></jhi-alert>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-4 no-padding-left">
+                <button class="btn btn-primary" ui-sref="work-log.new" >
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <span >
+                        Create new Work Log
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <div class="table-responsive">
+        <table class="jh-table table table-striped">
+            <thead>
+                <tr>
+                    <th><span>ID</span></th>
+                    <th><span>Approved</span></th>
+                    <th><span>Work From</span></th>
+                    <th><span>Work To</span></th>
+                    <th><span>User</span></th>
+                    <th><span>Project</span></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="workLog in vm.workLogs track by workLog.id">
+                    <td><a ui-sref="work-log-detail({id:workLog.id})">{{workLog.id}}</a></td>
+                    <td>{{workLog.approved}}</td>
+                    <td>{{workLog.workFrom | date:'medium'}}</td>
+                    <td>{{workLog.workTo | date:'medium'}}</td>
+                    <td>
+                        {{workLog.user.login}}
+                    </td>
+                    <td>
+                        <a ui-sref="project-detail({id:workLog.project.id})">{{workLog.project.name}}</a>
+                    </td>
+                    <td class="text-right">
+                        <div class="btn-group flex-btn-group-container">
+                            <button type="submit"
+                                    ui-sref="work-log-detail({id:workLog.id})"
+                                    class="btn btn-info btn-sm">
+                                <span class="glyphicon glyphicon-eye-open"></span>
+                                <span class="hidden-xs hidden-sm"></span>
+                            </button>
+                            <button type="submit"
+                                    ui-sref="work-log.edit({id:workLog.id})"
+                                    class="btn btn-primary btn-sm">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                                <span class="hidden-xs hidden-sm"></span>
+                            </button>
+                            <button type="submit"
+                                    ui-sref="work-log.delete({id:workLog.id})"
+                                    class="btn btn-danger btn-sm">
+                                <span class="glyphicon glyphicon-remove-circle"></span>
+                                <span class="hidden-xs hidden-sm"></span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

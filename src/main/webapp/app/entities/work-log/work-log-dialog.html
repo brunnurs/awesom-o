@@ -1,0 +1,102 @@
+
+<form name="editForm" role="form" novalidate ng-submit="vm.save()" show-validation>
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="vm.clear()">&times;</button>
+        <h4 class="modal-title" id="myWorkLogLabel">Create or edit a Work Log</h4>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" ng-show="vm.workLog.id">
+            <label for="id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                    ng-model="vm.workLog.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_approved">Approved</label>
+            <input type="checkbox" class="form-control" name="approved" id="field_approved"
+                    ng-model="vm.workLog.approved"
+                     />
+            <div ng-show="editForm.approved.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.approved.$error.required">
+                    This field is required.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_workFrom">Work From</label>
+                <div class="input-group">
+                    <input id="field_workFrom" type="text" class="form-control" name="workFrom" datetime-picker="{{dateformat}}" ng-model="vm.workLog.workFrom" is-open="vm.datePickerOpenStatus.workFrom"
+                    required  />
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="vm.openCalendar('workFrom')"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                </div>
+            <div ng-show="editForm.workFrom.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.workFrom.$error.required">
+                    This field is required.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.workFrom.$error.ZonedDateTimelocal">
+                    This field should be a date and time.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_workTo">Work To</label>
+                <div class="input-group">
+                    <input id="field_workTo" type="text" class="form-control" name="workTo" datetime-picker="{{dateformat}}" ng-model="vm.workLog.workTo" is-open="vm.datePickerOpenStatus.workTo"
+                    required  />
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="vm.openCalendar('workTo')"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                </div>
+            <div ng-show="editForm.workTo.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.workTo.$error.required">
+                    This field is required.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.workTo.$error.ZonedDateTimelocal">
+                    This field should be a date and time.
+                </p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="field_user">User</label>
+            <select class="form-control" id="field_user" name="user" ng-model="vm.workLog.user" ng-options="user as user.login for user in vm.users track by user.id" required>
+                <option value=""></option>
+            </select>
+        </div>
+        <div ng-show="editForm.user.$invalid">
+            <p class="help-block"
+                ng-show="editForm.user.$error.required">
+                This field is required.
+            </p>
+        </div>
+        <div class="form-group">
+            <label for="field_project">Project</label>
+            <select class="form-control" id="field_project" name="project" ng-model="vm.workLog.project" ng-options="project as project.name for project in vm.projects track by project.id" required>
+                <option value=""></option>
+            </select>
+        </div>
+        <div ng-show="editForm.project.$invalid">
+            <p class="help-block"
+                ng-show="editForm.project.$error.required">
+                This field is required.
+            </p>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Cancel</span>
+        </button>
+        <button type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-primary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
+        </button>
+    </div>
+</form>
