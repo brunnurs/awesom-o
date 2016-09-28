@@ -1,0 +1,27 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipName": "parent",
+            "otherEntityName": "user",
+            "relationshipType": "one-to-one",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "subsidiary",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipName": "child",
+            "otherEntityName": "user",
+            "relationshipType": "one-to-one",
+            "otherEntityField": "id",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "subsidiary"
+        }
+    ],
+    "fields": [],
+    "changelogDate": "20160928145631",
+    "dto": "no",
+    "service": "no",
+    "entityTableName": "subsidiary",
+    "pagination": "no"
+}
