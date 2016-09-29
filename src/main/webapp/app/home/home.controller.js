@@ -5,9 +5,9 @@
         .module('awesomoApp')
         .controller('HomeController', HomeController);
 
-    HomeController.$inject = ['$scope', 'Principal', 'LoginService', '$state', 'User'];
+    HomeController.$inject = ['$scope', 'Principal', 'LoginService', '$state', 'User', 'Project','WorkLog'];
 
-    function HomeController($scope, Principal, LoginService, $state, User) {
+    function HomeController($scope, Principal, LoginService, $state , User, Project, WorkLog) {
         var vm = this;
 
         vm.account = null;
@@ -15,16 +15,43 @@
         vm.login = LoginService.open;
         vm.register = register;
 
-        vm.newWorkLog = function () {
-            return {
-                approved: false,
-                workFrom: null,
-                workTo: null,
-                id: null,
-                user: null,
-                project: null
+        vm.projects = Project.query();
+
+        vm.newWorkLog = {
+            approved: false,
+            workFrom: null,
+            workTo: null,
+            id: null,
+            user: null,
+            project: null,
+            timeDiff : function () {
+                return ((this.workTo - this.workFrom) / 3600000).toFixed(2);
             }
         };
+
+        vm.datePickerOpenStatus = {};
+        vm.openCalendar = openCalendar;
+        vm.save = save;
+
+        function openCalendar (date) {
+            vm.datePickerOpenStatus[date] = true;
+        }
+
+        function save () {
+            vm.isSaving = true;
+            WorkLog.save(vm.newWorkLog, onSaveSuccess, onSaveError);
+        }
+
+        function onSaveSuccess (result) {
+            vm.isSaving = false;
+        }
+
+        function onSaveError () {
+            vm.isSaving = false;
+        }
+
+
+
 
         $scope.$on('authenticationSuccess', function () {
             getAccount();
