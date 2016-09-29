@@ -14,8 +14,7 @@
         vm.isAuthenticated = null;
         vm.login = LoginService.open;
         vm.register = register;
-
-        vm.projects = Project.query();
+        vm.success = null;
 
         vm.newWorkLog = {
             approved: false,
@@ -44,10 +43,12 @@
 
         function onSaveSuccess (result) {
             vm.isSaving = false;
+            vm.success = 'ok';
         }
 
         function onSaveError () {
             vm.isSaving = false;
+            vm.success = null;
         }
 
 
@@ -64,9 +65,13 @@
                 vm.account = account;
                 vm.isAuthenticated = Principal.isAuthenticated;
 
-                User.get({login:vm.account.login},function (user) {
-                    vm.newWorkLog.user = user;
-                });
+                if(vm.isAuthenticated) {
+                    User.get({login:vm.account.login},function (user) {
+                        vm.newWorkLog.user = user;
+                    });
+
+                    vm.projects = Project.query();
+                }
             });
         }
 

@@ -5,11 +5,13 @@
         </div>
         <div class="col-md-8">
             <h1>The awesome time tracking tool!</h1>
-            <jhi-alert></jhi-alert>
+            <div class="alert alert-success" ng-show="vm.success">
+                <strong>Your time has been logged successfully!</strong>
+            </div>
 
             <div ng-switch="vm.isAuthenticated()">
 
-                <div class="row" ng-switch-when="true">
+                <div ng-switch-when="true">
                     <form name="newWorklogForm" role="form" novalidate ng-submit="vm.save()" show-validation>
                         <div class="form-group">
                         <label class="control-label" for="field_workFrom">When did you start working?</label>

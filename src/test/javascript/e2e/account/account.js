@@ -13,7 +13,7 @@ describe('account', function () {
     });
 
     it('should fail to login with bad password', function () {
-        expect(element.all(by.css('h1')).first().getText()).toMatch(/Welcome, Java Hipster!/);
+        expect(element.all(by.css('h1')).first().getText()).toMatch(/The awesome time tracking tool!/);
         accountMenu.click();
         login.click();
 
@@ -31,7 +31,7 @@ describe('account', function () {
         password.clear().sendKeys('admin');
         element(by.css('button[type=submit]')).click();
 
-        expect(element(by.css('.alert-success')).getText()).toMatch(/You are logged in as user "admin"/);
+        expect(element(by.css('button[type=submit]')).getText()).toMatch(/Save 0.00 hours!/);
     });
 
     it('should be able to update settings', function () {

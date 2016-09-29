@@ -20,11 +20,12 @@ exports.config = {
     suites: {
         account: './e2e/account/*.js',
         admin: './e2e/admin/*.js',
-        entity: './e2e/entities/*.js'
+        entity: './e2e/entities/*.js',
+        home: './e2e/home/*.js'
     },
 
     capabilities: {
-        'browserName': 'firefox',
+        'browserName': 'chrome',
         'phantomjs.binary.path': require('phantomjs-prebuilt').path,
         'phantomjs.ghostdriver.cli.args': ['--loglevel=DEBUG']
     },
