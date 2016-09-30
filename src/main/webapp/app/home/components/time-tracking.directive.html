@@ -1,0 +1,72 @@
+<div class="alert alert-success" ng-show="$ctrl.success">
+    <strong>Your time has been logged successfully!</strong>
+</div>
+
+<div ng-if="!!$ctrl.subsidiary" class="alert alert-success">
+    <p>You are permitted to track time for user <strong>{{$ctrl.subsidiary.child.login}}</strong> </p> <br>
+    <div class="form-group">
+        <label class="control-label" for="use_subsidiary">Do you wana track time for user <strong>{{$ctrl.subsidiary.child.login}}</strong>?</label>
+        <input type="checkbox" class="form-control" name="approved" id="use_subsidiary"
+               ng-model="$ctrl.useSubsidiary"
+        />
+    </div>
+</div>
+
+
+<form name="newWorklogForm" role="form" novalidate ng-submit="$ctrl.save()" show-validation>
+    <div class="form-group">
+        <label class="control-label" for="field_workFrom">When did you start working?</label>
+        <div class="input-group">
+            <input id="field_workFrom" type="text" class="form-control" name="workFrom" datetime-picker="{{dateformat}}" ng-model="$ctrl.newWorkLog.workFrom" is-open="$ctrl.datePickerOpenStatus.workFrom"
+                   required  />
+            <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default" ng-click="$ctrl.openCalendar('workFrom')"><i class="glyphicon glyphicon-calendar"></i></button>
+                                </span>
+        </div>
+        <div ng-show="newWorklogForm.workFrom.$invalid">
+            <p class="help-block"
+               ng-show="newWorklogForm.workFrom.$error.required">
+                This field is required.
+            </p>
+            <p class="help-block"
+               ng-show="newWorklogForm.workFrom.$error.ZonedDateTimelocal">
+                This field should be a date and time.
+            </p>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label" for="field_workTo">When did you stop working?</label>
+        <div class="input-group">
+            <input id="field_workTo" type="text" class="form-control" name="workTo" datetime-picker="{{dateformat}}" ng-model="$ctrl.newWorkLog.workTo" is-open="$ctrl.datePickerOpenStatus.workTo"
+                   required  />
+            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="$ctrl.openCalendar('workTo')"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+        </div>
+        <div ng-show="newWorklogForm.workTo.$invalid">
+            <p class="help-block"
+               ng-show="newWorklogForm.workTo.$error.required">
+                This field is required.
+            </p>
+            <p class="help-block"
+               ng-show="newWorklogForm.workTo.$error.ZonedDateTimelocal">
+                This field should be a date and time.
+            </p>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="field_project">What project have you been working on?</label>
+        <select class="form-control" id="field_project" name="project" ng-model="$ctrl.newWorkLog.project" ng-options="project as project.name for project in $ctrl.projects track by project.id" required>
+            <option value=""></option>
+        </select>
+    </div>
+    <div ng-show="newWorklogForm.project.$invalid">
+        <p class="help-block"
+           ng-show="newWorklogForm.project.$error.required">
+            This field is required.
+        </p>
+    </div>
+    <button type="submit" ng-disabled="newWorklogForm.$invalid || $ctrl.isSaving" class="btn btn-primary">
+        <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save {{$ctrl.newWorkLog.timeDiff()}} hours!</span>
+    </button>
+</form>
