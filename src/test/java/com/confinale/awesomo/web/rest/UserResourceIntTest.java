@@ -19,6 +19,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -38,7 +41,6 @@ public class UserResourceIntTest {
     private UserService userService;
 
     private MockMvc restUserMockMvc;
-
     /**
      * Create a User.
      *
@@ -46,13 +48,16 @@ public class UserResourceIntTest {
      * if they test an entity which has a required relationship to the User entity.
      */
     public static User createEntity(EntityManager em) {
+        String firstName = RandomStringUtils.randomAlphabetic(5);
+        String lastName = RandomStringUtils.randomAlphabetic(5);
+
         User user = new User();
-        user.setLogin("test");
+        user.setLogin(firstName);
         user.setPassword(RandomStringUtils.random(60));
         user.setActivated(true);
-        user.setEmail("test@test.com");
-        user.setFirstName("test");
-        user.setLastName("test");
+        user.setEmail(firstName + "." + lastName + "@test.com");
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
         user.setLangKey("en");
         em.persist(user);
         em.flush();

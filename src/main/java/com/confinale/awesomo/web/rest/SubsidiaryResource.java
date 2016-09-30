@@ -27,7 +27,7 @@ import java.util.Optional;
 public class SubsidiaryResource {
 
     private final Logger log = LoggerFactory.getLogger(SubsidiaryResource.class);
-        
+
     @Inject
     private SubsidiaryRepository subsidiaryRepository;
 
@@ -91,6 +91,31 @@ public class SubsidiaryResource {
         List<Subsidiary> subsidiaries = subsidiaryRepository.findAll();
         return subsidiaries;
     }
+
+
+    /**
+     * GET  GET  /subsidiaries/parent/{userId} : Get a subsidiary for a certain parent user if exist.
+     *
+     * @param userId the id of the parent user
+     * @return the ResponseEntity with status 200 (OK) and with body the subsidiary, or with status 404 (Not Found)
+     */
+    @RequestMapping(value = "/subsidiaries/parent/{userId}",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<Subsidiary> getSubsidiaryByParentUser(@PathVariable Long userId) {
+        log.debug("REST request to get Subsidiary with parent user Id : {}", userId);
+        Optional<Subsidiary> subsidiary = subsidiaryRepository.findOneByParentId(userId);
+
+        if (subsidiary.isPresent()) {
+            return new ResponseEntity<>(
+                subsidiary.get(),
+                HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 
     /**
      * GET  /subsidiaries/:id : get the "id" subsidiary.

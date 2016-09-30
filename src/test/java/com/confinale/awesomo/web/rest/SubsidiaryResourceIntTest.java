@@ -2,7 +2,9 @@ package com.confinale.awesomo.web.rest;
 
 import com.confinale.awesomo.AwesomoApp;
 
+import com.confinale.awesomo.domain.Project;
 import com.confinale.awesomo.domain.Subsidiary;
+import com.confinale.awesomo.domain.User;
 import com.confinale.awesomo.repository.SubsidiaryRepository;
 
 import org.junit.Before;
@@ -73,6 +75,17 @@ public class SubsidiaryResourceIntTest {
      */
     public static Subsidiary createEntity(EntityManager em) {
         Subsidiary subsidiary = new Subsidiary();
+
+        User parent = UserResourceIntTest.createEntity(em);
+        em.persist(parent);
+        em.flush();
+        subsidiary.setParent(parent);
+
+        User child = UserResourceIntTest.createEntity(em);
+        em.persist(child);
+        em.flush();
+        subsidiary.setChild(child);
+
         return subsidiary;
     }
 
@@ -120,6 +133,19 @@ public class SubsidiaryResourceIntTest {
 
         // Get the subsidiary
         restSubsidiaryMockMvc.perform(get("/api/subsidiaries/{id}", subsidiary.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.id").value(subsidiary.getId().intValue()));
+    }
+
+    @Test
+    @Transactional
+    public void getSubsidiaryByParentUser() throws Exception {
+        // Initialize the database
+        subsidiaryRepository.saveAndFlush(subsidiary);
+
+        // Get the subsidiary
+        restSubsidiaryMockMvc.perform(get("/api/subsidiaries/parent/{parentId}", subsidiary.getParent().getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(subsidiary.getId().intValue()));
