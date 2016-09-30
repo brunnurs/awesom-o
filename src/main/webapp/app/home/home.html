@@ -9,6 +9,18 @@
                 <strong>Your time has been logged successfully!</strong>
             </div>
 
+            <div ng-switch="!!vm.subsidiary">
+                <div class="alert alert-success" ng-switch-when="true">
+                    <p>You are permitted to track time for user <strong>{{vm.subsidiary.child.login}}</strong>! </p>
+                    <div class="form-group">
+                        <label class="control-label" for="use_subsidiary">Do you wana track time for user <strong>{{vm.subsidiary.child.login}}</strong>?</label>
+                        <input type="checkbox" class="form-control" name="approved" id="use_subsidiary"
+                               ng-model="vm.useSubsidiary"
+                        />
+                    </div>
+                </div>
+            </div>
+
             <div ng-switch="vm.isAuthenticated()">
 
                 <div ng-switch-when="true">

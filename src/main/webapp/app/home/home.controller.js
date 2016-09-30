@@ -5,9 +5,9 @@
         .module('awesomoApp')
         .controller('HomeController', HomeController);
 
-    HomeController.$inject = ['$scope', 'Principal', 'LoginService', '$state', 'User', 'Project','WorkLog'];
+    HomeController.$inject = ['$scope', 'Principal', 'LoginService', '$state', 'User', 'Project','WorkLog','Subsidiary'];
 
-    function HomeController($scope, Principal, LoginService, $state , User, Project, WorkLog) {
+    function HomeController($scope, Principal, LoginService, $state , User, Project, WorkLog, Subsidiary) {
         var vm = this;
 
         vm.account = null;
@@ -18,6 +18,10 @@
 
         vm.newWorkLog = createEmptyWorkLog();
 
+        vm.subsidiary = null;
+        vm.user = null;
+        vm.useSubsidiary = false;
+
         vm.datePickerOpenStatus = {};
         vm.openCalendar = openCalendar;
         vm.save = save;
@@ -27,6 +31,12 @@
         }
 
         function save () {
+            if(vm.useSubsidiary) {
+                vm.newWorkLog.user = vm.subsidiary.child;
+            } else {
+                vm.newWorkLog.user = vm.user;
+            }
+
             vm.isSaving = true;
             WorkLog.save(vm.newWorkLog, onSaveSuccess, onSaveError);
         }
@@ -42,8 +52,6 @@
         }
 
 
-
-
         $scope.$on('authenticationSuccess', function () {
             getAccount();
         });
@@ -57,7 +65,11 @@
 
                 if(vm.isAuthenticated) {
                     User.get({login:vm.account.login},function (user) {
-                        vm.newWorkLog.user = user;
+                        vm.user = user;
+
+                        Subsidiary.getByParentId({parentId:user.id}, function (subsidiary) {
+                            vm.subsidiary = subsidiary;
+                        })
                     });
 
                     vm.projects = Project.query();
@@ -78,7 +90,7 @@
                     return ((this.workTo - this.workFrom) / 3600000).toFixed(2);
                 }
             };
-        };
+        }
 
         function register() {
             $state.go('register');
