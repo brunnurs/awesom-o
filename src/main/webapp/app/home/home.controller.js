@@ -16,17 +16,7 @@
         vm.register = register;
         vm.success = null;
 
-        vm.newWorkLog = {
-            approved: false,
-            workFrom: null,
-            workTo: null,
-            id: null,
-            user: null,
-            project: null,
-            timeDiff : function () {
-                return ((this.workTo - this.workFrom) / 3600000).toFixed(2);
-            }
-        };
+        vm.newWorkLog = createEmptyWorkLog();
 
         vm.datePickerOpenStatus = {};
         vm.openCalendar = openCalendar;
@@ -75,6 +65,20 @@
             });
         }
 
+
+        function createEmptyWorkLog() {
+            return {
+                approved: false,
+                workFrom: null,
+                workTo: null,
+                id: null,
+                user: null,
+                project: null,
+                timeDiff: function () {
+                    return ((this.workTo - this.workFrom) / 3600000).toFixed(2);
+                }
+            };
+        };
 
         function register() {
             $state.go('register');

@@ -1,5 +1,23 @@
 <div>
     <div class="row">
-        <h1>A dummy page!</h1>
+        <h1>Project statistics</h1>
+        <div class="table-responsive">
+            <table class="jh-table table table-striped">
+                <thead>
+                    <tr>
+                        <th><span>Project</span></th>
+                        <th><span>User</span></th>
+                        <th><span>Working hours</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="group in vm.groupedWorkLogs">
+                    <td>{{group.project.name}}</td>
+                    <td>{{group.user.login }}</td>
+                    <td><strong>{{group.workHours }}</strong></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>

@@ -5,74 +5,51 @@
         .module('awesomoApp')
         .controller('StatisticsController', StatisticsController);
 
-    StatisticsController.$inject = ['$scope', 'Principal', 'LoginService', '$state', 'User', 'Project','WorkLog'];
+    StatisticsController.$inject = ['$scope', '$state' ,'WorkLog'];
 
-    function StatisticsController($scope, Principal, LoginService, $state , User, Project, WorkLog) {
+    function StatisticsController($scope, $state ,WorkLog) {
         var vm = this;
 
-        vm.account = null;
-        vm.isAuthenticated = null;
-        vm.login = LoginService.open;
-        vm.register = register;
+        vm.groupedWorkLogs = [];
 
-        vm.projects = Project.query();
+        loadAll();
 
-        vm.newWorkLog = {
-            approved: false,
-            workFrom: null,
-            workTo: null,
-            id: null,
-            user: null,
-            project: null,
-            timeDiff : function () {
-                return ((this.workTo - this.workFrom) / 3600000).toFixed(2);
-            }
-        };
-
-        vm.datePickerOpenStatus = {};
-        vm.openCalendar = openCalendar;
-        vm.save = save;
-
-        function openCalendar (date) {
-            vm.datePickerOpenStatus[date] = true;
-        }
-
-        function save () {
-            vm.isSaving = true;
-            WorkLog.save(vm.newWorkLog, onSaveSuccess, onSaveError);
-        }
-
-        function onSaveSuccess (result) {
-            vm.isSaving = false;
-        }
-
-        function onSaveError () {
-            vm.isSaving = false;
-        }
-
-
-
-
-        $scope.$on('authenticationSuccess', function () {
-            getAccount();
-        });
-
-        getAccount();
-
-        function getAccount() {
-            Principal.identity().then(function (account) {
-                vm.account = account;
-                vm.isAuthenticated = Principal.isAuthenticated;
-
-                User.get({login:vm.account.login},function (user) {
-                    vm.newWorkLog.user = user;
-                });
+        function loadAll() {
+            WorkLog.query(function(result) {
+                groupWorkLogs(result);
             });
+
+            //TODO: use a nice helper library (lodash/undersocre.cs) to solve that problem in a more functional way (groupBy)
+            var groupWorkLogs = function (workLogs) {
+                workLogs.forEach(function (workLog) {
+                    var group = null;
+
+                    var existingGroup = vm.groupedWorkLogs.filter(function (group) {
+                        return group.project.id === workLog.project.id && group.user.id === workLog.user.id;
+                    });
+
+                    if (existingGroup.length > 0) {
+                        group = existingGroup[0];
+                    } else {
+                        group = {
+                            project: workLog.project,
+                            user: workLog.user,
+                            workHours : 0.0
+                        };
+
+                        vm.groupedWorkLogs.push(group);
+                    }
+
+                    //TODO: use the moment.js library to get the time span easier and saver
+                    group.workHours = parseFloat(group.workHours) + parseFloat(calculateTimeDiff(new Date(workLog.workFrom), new Date(workLog.workTo)));
+
+                    function calculateTimeDiff(workFrom, workTo) {
+                        return ((workTo - workFrom) / 3600000).toFixed(2);
+                    }
+                });
+            };
         }
 
 
-        function register() {
-            $state.go('register');
-        }
     }
 })();
